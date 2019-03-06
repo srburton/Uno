@@ -13,7 +13,7 @@ namespace Uno.UI
 	/// </summary>
 	internal class KeyboardRectProvider : PopupWindow, ViewTreeObserver.IOnGlobalLayoutListener
 	{
-		public delegate void LayoutChangedListener(Rect keyboard, Rect navigation, Rect union);
+		public delegate void LayoutChangedListener(Rect union);
 		
 		private readonly LayoutChangedListener _onLayoutChanged;
 		private readonly Activity _activity;
@@ -33,7 +33,7 @@ namespace Uno.UI
 			InputMethodMode = InputMethod.Needed;
 			Width = 0;
 			Height = ViewGroup.LayoutParams.MatchParent;
-			SetBackgroundDrawable(new ColorDrawable(Android.Graphics.Color.Transparent));
+			SetBackgroundDrawable(new ColorDrawable(Color.Transparent));
 		}
 
 		/// <summary>
@@ -68,20 +68,18 @@ namespace Uno.UI
 		/// </summary>
 		void ViewTreeObserver.IOnGlobalLayoutListener.OnGlobalLayout()
 		{
-			var realMetrics = Get<DisplayMetrics>(_activity.WindowManager.DefaultDisplay.GetRealMetrics);
-			var displayRect = Get<Rect>(_activity.WindowManager.DefaultDisplay.GetRectSize);
-			var usableRect = Get<Rect>(_popupView.GetWindowVisibleDisplayFrame);
-
 			// we assume that the keyboard and the navigation bar always occupy the bottom area, with the keyboard being above the navigation bar
 			// their placements can be calculated based on the follow observation:
 			// [size] realMetrics	: screen
 			// [rect] displayRect	: display area = screen - (bottom: nav_bar)
 			// [rect] usableRect	: usable area = screen - (top: status_bar) - (bottom: keyboard + nav_bar)
-			var navigationRect = new Rect(0, displayRect.Bottom, realMetrics.WidthPixels, realMetrics.HeightPixels);
-			var keyboardRect = new Rect(0, usableRect.Bottom, realMetrics.WidthPixels, navigationRect.Top);
+			var realMetrics = Get<DisplayMetrics>(_activity.WindowManager.DefaultDisplay.GetRealMetrics);
+			//var displayRect = Get<Rect>(_activity.WindowManager.DefaultDisplay.GetRectSize);
+			var usableRect = Get<Rect>(_popupView.GetWindowVisibleDisplayFrame);
+
 			var occupiedRect = new Rect(0, usableRect.Bottom, realMetrics.WidthPixels, realMetrics.HeightPixels);
 
-			_onLayoutChanged?.Invoke(keyboardRect, navigationRect, occupiedRect);
+			_onLayoutChanged?.Invoke(occupiedRect);
 
 			T Get<T>(Action<T> getter) where T : new()
 			{

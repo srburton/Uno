@@ -1,22 +1,16 @@
 ﻿#if XAMARIN_ANDROID
-using Android.App;
-using Android.Content.PM;
-using Android.Views;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Android.Content.Res;
-using Windows.UI.Xaml.Media;
-using Uno.Extensions;
-using Uno.UI;
-using Android.Views.InputMethods;
+using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Widget;
-using Android.Graphics.Drawables;
+using Android.Content.PM;
+using Android.Content.Res;
 using Android.Graphics;
-using Android.Util;
+using Android.OS;
+using Android.Views;
+using Android.Views.InputMethods;
+using Uno.UI;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml.Media;
 
 namespace Windows.UI.Xaml
 {
@@ -102,11 +96,9 @@ namespace Windows.UI.Xaml
 			Window.ClearFlags(WindowManagerFlags.Fullscreen);
 		}
 
-		private void OnLayoutChanged(Rect keyboard, Rect navigation, Rect union)
+		private void OnLayoutChanged(Rect occludedRect)
 		{
-			_inputPane.KeyboardRect = ViewHelper.PhysicalToLogicalPixels(keyboard);
-			_inputPane.NavigationBarRect = ViewHelper.PhysicalToLogicalPixels(navigation);
-			_inputPane.OccludedRect = ViewHelper.PhysicalToLogicalPixels(union);
+			_inputPane.OccludedRect = ViewHelper.PhysicalToLogicalPixels(occludedRect);
 		}
 
 		protected override void OnCreate(Bundle bundle)
@@ -166,6 +158,25 @@ namespace Windows.UI.Xaml
 		public override void OnConfigurationChanged(Configuration newConfig)
 		{
 			base.OnConfigurationChanged(newConfig);
+
+			// Checks whether a hardware keyboard is available
+			if (newConfig.HardKeyboardHidden == HardKeyboardHidden.No)
+			{
+				//Toast.makeText(this, "keyboard visible", Toast.LENGTH_SHORT).show();
+			}
+			else if (newConfig.HardKeyboardHidden == HardKeyboardHidden.Yes)
+			{
+				//Toast.makeText(this, "keyboard hidden", Toast.LENGTH_SHORT).show();
+			}
+
+			if(newConfig.NavigationHidden == NavigationHidden.No)
+			{
+
+			}
+			else if(newConfig.NavigationHidden == NavigationHidden.Yes)
+			{
+				
+			}
 
 			RaiseConfigurationChanges();
 		}
