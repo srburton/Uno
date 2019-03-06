@@ -3,6 +3,7 @@ using Android.App;
 using Android.Util;
 using Android.Views;
 using Uno.UI;
+using Uno.UI.Controls;
 using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -25,8 +26,6 @@ namespace Windows.UI.Xaml
 		}
 
 		internal int SystemUiVisibility { get; set; }
-
-		private bool IsNavigationBarVisible => (SystemUiVisibility & (int)SystemUiFlags.HideNavigation) == 0;
 
 		private void InternalSetContent(UIElement value)
 		{
@@ -130,33 +129,11 @@ namespace Windows.UI.Xaml
 			return logicalStatusBarHeight;
 		}
 
-		private double GetLogicalNavigationBarHeight()
+		public double GetLogicalNavigationBarHeight()
 		{
-			var logicalNavigationBarHeight = 0d;
-			var metrics = new DisplayMetrics();
-			var defaultDisplay = (ContextHelper.Current as Activity)?.WindowManager?.DefaultDisplay;
-
-			var activity = ContextHelper.Current as Activity;
-			var decorView = activity.Window.DecorView;
-
-			var isNavigationBarTranslucent =
-				((int)activity.Window.Attributes.Flags & (int)WindowManagerFlags.TranslucentNavigation) != 0
-				|| ((int)activity.Window.Attributes.Flags & (int)WindowManagerFlags.LayoutNoLimits) != 0;
-
-			if (defaultDisplay != null && IsNavigationBarVisible && isNavigationBarTranslucent)
-			{
-				defaultDisplay.GetMetrics(metrics);
-				var usableHeight = metrics.HeightPixels;
-
-				defaultDisplay.GetRealMetrics(metrics);
-				var realHeight = metrics.HeightPixels;
-
-				logicalNavigationBarHeight = realHeight > usableHeight
-					? ViewHelper.PhysicalToLogicalPixels(realHeight - usableHeight)
-					: 0;
-			}
-
-			return logicalNavigationBarHeight;
+			return NavigationBarHelper.IsNavigationBarVisible && NavigationBarHelper.IsNavigationBarTranslucent
+				? NavigationBarHelper.LogicalNavigationBarHeight
+				: 0;
 		}
 
 		internal void DisplayFullscreen(UIElement element)
