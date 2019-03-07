@@ -2,6 +2,7 @@
 using Android.App;
 using Android.Graphics;
 using Android.Graphics.Drawables;
+using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -11,7 +12,7 @@ namespace Uno.UI
 	/// <summary>
 	/// A <see cref="PopupWindow"/> that provides the size and location of the keyboard by being resized using <see cref="SoftInput.AdjustResize"/>.
 	/// </summary>
-	internal class KeyboardRectProvider : PopupWindow, ViewTreeObserver.IOnGlobalLayoutListener
+	internal class KeyboardRectProvider : PopupWindow, ViewTreeObserver.IOnGlobalLayoutListener, View.IOnSystemUiVisibilityChangeListener
 	{
 		public delegate void LayoutChangedListener(Rect union);
 		
@@ -46,6 +47,7 @@ namespace Uno.UI
 			{
 				ShowAtLocation(view, GravityFlags.NoGravity, 0, 0);
 				_popupView.ViewTreeObserver.AddOnGlobalLayoutListener(this);
+				_popupView.SetOnSystemUiVisibilityChangeListener(this);
 			}
 		}
 
@@ -61,12 +63,22 @@ namespace Uno.UI
 			}
 		}
 
+		public void OnSystemUiVisibilityChange([GeneratedEnum] StatusBarVisibility visibility)
+		{
+			MeasureOccludedRect();
+		}
+
 		/// <summary>
 		/// Called whenever the size of the <see cref="_popupView"/> changes.
 		/// The size and location of the keyboard can be inferred from the
 		/// remaining area of the screen (below the <see cref="_popupView"/>).
 		/// </summary>
 		void ViewTreeObserver.IOnGlobalLayoutListener.OnGlobalLayout()
+		{
+			MeasureOccludedRect();
+		}
+
+		private void MeasureOccludedRect()
 		{
 			// we assume that the keyboard and the navigation bar always occupy the bottom area, with the keyboard being above the navigation bar
 			// their placements can be calculated based on the follow observation:

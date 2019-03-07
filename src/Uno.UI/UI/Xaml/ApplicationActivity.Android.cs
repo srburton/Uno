@@ -98,7 +98,10 @@ namespace Windows.UI.Xaml
 
 		private void OnLayoutChanged(Rect occludedRect)
 		{
-			_inputPane.OccludedRect = ViewHelper.PhysicalToLogicalPixels(occludedRect);
+			if(_inputPane.OccludedRect != occludedRect)
+			{
+				_inputPane.OccludedRect = ViewHelper.PhysicalToLogicalPixels(occludedRect);
+			}
 		}
 
 		protected override void OnCreate(Bundle bundle)
