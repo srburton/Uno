@@ -162,6 +162,7 @@
  * 147405 Fix NRE on some MediaTransportControl controls
  * #139 Update Uno.SourceGenerationTasks to improve build performance
  * Update `Uno.UI.Toolkit` base UWP sdk to 17763
+ * [Wasm] Disable the root element scrolling (bounce) on touch devices
 
 ## Release 1.42
 
