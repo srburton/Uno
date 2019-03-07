@@ -26,12 +26,9 @@ namespace Uno.UI.Controls
 			{
 				var activity = ContextHelper.Current as Activity;
 				var systemUiVisibility = activity.Window.DecorView.SystemUiVisibility;
-				var resources = activity.Resources;
-				int id = resources.GetIdentifier("config_showNavigationBar", "bool", "android");
 
 				return (Window.Current.SystemUiVisibility & (int)SystemUiFlags.HideNavigation) == 0
-					|| ((int)systemUiVisibility & (int)SystemUiFlags.HideNavigation) == 0
-					|| (id > 0 && resources.GetBoolean(id));
+					|| ((int)systemUiVisibility & (int)SystemUiFlags.HideNavigation) == 0;
 			}
 		}
 
