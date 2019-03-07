@@ -162,25 +162,6 @@ namespace Windows.UI.Xaml
 		{
 			base.OnConfigurationChanged(newConfig);
 
-			// Checks whether a hardware keyboard is available
-			if (newConfig.HardKeyboardHidden == HardKeyboardHidden.No)
-			{
-				//Toast.makeText(this, "keyboard visible", Toast.LENGTH_SHORT).show();
-			}
-			else if (newConfig.HardKeyboardHidden == HardKeyboardHidden.Yes)
-			{
-				//Toast.makeText(this, "keyboard hidden", Toast.LENGTH_SHORT).show();
-			}
-
-			if(newConfig.NavigationHidden == NavigationHidden.No)
-			{
-
-			}
-			else if(newConfig.NavigationHidden == NavigationHidden.Yes)
-			{
-				
-			}
-
 			RaiseConfigurationChanges();
 		}
 
