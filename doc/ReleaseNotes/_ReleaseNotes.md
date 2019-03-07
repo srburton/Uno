@@ -77,6 +77,13 @@
     - Move to net461 for test projects so the the Uno.Xaml project can be referenced properly
     - Use the latest MSBuild.Sdk.Extras for actual parallel cross-targeted builds
     - Move the nuget package versions to the Directory.Build.targets file so it's easier to change all versions at once.
+* Add support for NavigationView Top Navigation
+* Adjust `SystemChromeMediumHighColor` to use the Light theme
+* Add support for `FrameworkElement.GoToStateCore`
+* Adjust `ListView` measure/arrange for dynamic content
+* Add some missing default UWP styles
+* The `FrameworkElement.IsLoaded` property is now public
+* Improve XAML generation error messages for unknown symbols
 
 ### Breaking changes
 * Refactored ToggleSwitch Default Native XAML Styles. (cf. 'NativeDefaultToggleSwitch' styles in Generic.Native.xaml)
@@ -209,6 +216,7 @@
  * 138099, 138463 [Android] fixed `ListView` scrolls up when tapping an item at the bottom of screen
  * 140548 [iOS] fixed `CommandBar` not rendering until reloaded
  * [147530] Add a missing `global::` qualifier in the `BindableMetadataGenerator`
+ * [WASM] Add workaround for mono linker issue in AOT mode in `ObservableVectorWrapper`
 
 ## Release 1.41
 
@@ -239,3 +247,5 @@
  * 148228 [Android] Right theme (clock or spinner) is selected for specific time increments 
  * 148229 [Android] Right time is picked and rounded to nearest time increment in clock mode 
  * 148241 [Android] won't open if `MinuteIncrement` is not set
+ * 148582 Time picker initial time when using time increment is using initial time seconds when rounding.. it should ignore seconds.. 
+ * 148285 [iOS] TimePicker is clipped off screen when ios:FlyoutPlacement isnt set
